@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 import onChange from 'on-change';
+import i18next from 'i18next';
 import view from './view.js';
+import resources from './locales/resources.js';
 
 export default function app() {
   const state = {
@@ -12,14 +14,13 @@ export default function app() {
     fids: [],
   };
 
-  // const defaultLang = 'ru';
-
-  /* const i18n = i18next.createInstance();
+  const defaultLang = 'ru';
+  const i18n = i18next.createInstance();
   i18n.init({
     debug: false,
     lng: defaultLang,
     resources,
-  }) */
+  });
 
   const elements = {
     form: document.querySelector('.rss-form'),
@@ -27,15 +28,15 @@ export default function app() {
     errorFields: {},
   };
 
-  /* yup.setLocale({
+  yup.setLocale({ // изучить
     mixed: {
       required: i18n.t('errors.required'),
-      notOneOf:  i18n.t('errors.exists'),
+      notOneOf: i18n.t('errors.exists'),
     },
     string: {
-      url:  i18n.t('errors.invalidUrl'),
+      url: i18n.t('errors.invalidUrl'),
     },
-  }) */
+  });
 
   function validate(fields, fids) {
     const schema = yup.object({
