@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import onChange from 'on-change';
-import view from './view';
+import view from './view.js';
 
 export default function app() {
   const state = {
