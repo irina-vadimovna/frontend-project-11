@@ -4,7 +4,7 @@ export default {
       ru: 'Русский',
     },
     errors: {
-      invalidUrl: 'Ссылка должна быть валидным URL',
+      invalid: 'Ссылка должна быть валидным URL',
       exists: 'RSS уже существует',
       required: 'Не должно быть пустым',
       invalidRss: 'Ресурс не содержит валидный RSS',

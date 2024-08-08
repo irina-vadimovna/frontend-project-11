@@ -28,7 +28,7 @@ export default function app() {
     errorFields: {},
   };
 
-  yup.setLocale({ // изучить
+  yup.setLocale({
     mixed: {
       required: i18n.t('errors.required'),
       notOneOf: i18n.t('errors.exists'),
@@ -53,12 +53,12 @@ export default function app() {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    const out = formData.get('url');
+    const link = formData.get('url');
 
-    validate({ url: out }, state.fids)
+    validate({ url: link }, state.fids)
       .then(() => {
         console.log('good');
-        watchedState.fids.push(out);
+        watchedState.fids.push(link);
         watchedState.form.validUrl = false;
         watchedState.form.errors = null;
         elements.input.focus();

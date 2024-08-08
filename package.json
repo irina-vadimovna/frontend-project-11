@@ -35,7 +35,7 @@
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.2.3",
     "i18next": "^23.12.2",
     "on-change": "^5.0.1",
     "yup": "^1.4.0"

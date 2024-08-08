@@ -1,7 +1,7 @@
-const input = document.querySelector('#url-input');
-const feedback = document.querySelector('.feedback');
-
 export default function view(path, value) {
+  const input = document.querySelector('#url-input');
+  const feedback = document.querySelector('.feedback');
+
   switch (path) {
     case 'form.validUrl':
       if (value) {
@@ -14,6 +14,6 @@ export default function view(path, value) {
       feedback.textContent = value;
       break;
     default:
-      throw new Error('err');
+      throw new Error('error view');
   }
 }
