@@ -2,9 +2,13 @@ export default function view(path, value) {
   const input = document.querySelector('#url-input');
   const feedback = document.querySelector('.feedback');
 
+  /* const render = (watchedState, i18n) => {
+
+  }; */
+
   switch (path) {
-    case 'form.validUrl':
-      if (value) {
+    case 'form.status':
+      if (value === 'invalid') {
         input.classList.add('is-invalid');
       } else {
         input.classList.remove('is-invalid');
