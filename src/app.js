@@ -14,8 +14,10 @@ export default function app() {
       status: '', // 'success', 'failed', ''
       errors: null,
     },
-    links: [],
-    feeds: [],
+    feeds: {
+      links: [],
+      ids: [],
+    },
     posts: [],
   };
 
@@ -72,12 +74,11 @@ export default function app() {
     const formData = new FormData(e.target);
     const link = formData.get('url');
 
-    validate({ url: link }, watchedState.links)
+    validate({ url: link }, watchedState.feeds.links)
       .then(() => {
         console.log('good');
         watchedState.form.valid = true;
-        watchedState.links.push(link);
-        watchedState.form.errors = null;
+        watchedState.feeds.links.push(link);
         elements.input.focus();
         elements.form.reset();
       })

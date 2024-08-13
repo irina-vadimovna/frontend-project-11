@@ -21,7 +21,7 @@ export default function view(watchedState, path, value, i18n) {
     case 'form.errors':
       feedback.textContent = value;
       break;
-    case 'links':
+    case 'feeds.links':
       break;
     default:
       console.log('default value');
