@@ -1,5 +1,3 @@
-// import onChange from 'on-change';
-
 // слой отображения View, render функция, которая принимает состояние.
 // реализовать во view.js. Вынести валидацию и i18next?
 // здесь хранятся все html элементы, которые мы отрисовываем. Для фидов и постов.
@@ -10,7 +8,7 @@ const feedback = document.querySelector('.feedback');
 export default function view(watchedState, path, value, i18n) {
   switch (path) {
     case 'form.valid':
-      if (value) {
+      if (!value) {
         input.classList.add('is-invalid');
         feedback.classList.add('text-danger');
       } else {

@@ -75,7 +75,7 @@ export default function app() {
     validate({ url: link }, watchedState.links)
       .then(() => {
         console.log('good');
-        watchedState.form.valid = false;
+        watchedState.form.valid = true;
         watchedState.links.push(link);
         watchedState.form.errors = null;
         elements.input.focus();
@@ -83,7 +83,7 @@ export default function app() {
       })
       .catch((err) => {
         console.log('bad');
-        watchedState.form.valid = true;
+        watchedState.form.valid = false;
         watchedState.form.errors = err.message;
       });
   });
