@@ -11,14 +11,18 @@ export default function app() {
   const state = {
     form: {
       valid: null,
-      status: '', // 'success', 'failed', ''
+      errors: null,
+    },
+    loadingProccess: {
+      status: '', // 'success', 'failed', 'loading'
       errors: null,
     },
     feeds: {
       links: [],
-      ids: [],
     },
-    posts: [],
+    posts: {
+      ui: [],
+    },
   };
 
   const elements = {

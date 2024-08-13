@@ -19,7 +19,7 @@ export default function view(watchedState, path, value, i18n) {
       }
       break;
     case 'form.errors':
-      feedback.textContent = value;
+      feedback.textContent = i18n.t(value);
       break;
     case 'feeds.links':
       break;
