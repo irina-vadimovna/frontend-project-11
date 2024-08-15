@@ -3,10 +3,11 @@ import render from './render.js';
 
 export default (elements, i18n, state) => {
   const { input, message, submitBtn } = elements;
+
   const [postsTr, feedsTr, viewButton] = [i18n.t('posts'), i18n.t('feeds'), i18n.t('viewButton')];
   return onChange(state, () => {
     const {
-      rssForm: { error, fields, status },
+      form: { error, field, status },
     } = state;
     const invalidMessage = () => {
       message.classList.remove('text-success');
@@ -24,7 +25,6 @@ export default (elements, i18n, state) => {
       submitBtn.disabled = true;
     }
     if (status === 'success') {
-      input.focus();
       render(state, [postsTr, feedsTr, viewButton]);
 
       message.classList.add('text-success');
@@ -32,6 +32,6 @@ export default (elements, i18n, state) => {
       input.classList.remove('is-invalid');
       message.textContent = i18n.t('success');
     }
-    input.value = fields.input;
+    input.value = field.input;
   });
 };

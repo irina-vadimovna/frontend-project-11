@@ -61,8 +61,8 @@ const app = () => {
     };
 
     const state = watch(elements, i18nInstance, {
-      rssForm: {
-        fields: {
+      form: {
+        field: {
           input: '',
         },
         error: '',
@@ -77,12 +77,12 @@ const app = () => {
     });
 
     const errorHandler = (error) => {
-      state.rssForm.status = 'fail';
+      state.form.status = 'fail';
       if (typeof error === 'string') {
-        state.rssForm.error = error;
+        state.form.error = error;
       } else if (error.code === 'ERR_NETWORK') {
-        state.rssForm.error = 'networkError';
-      } else state.rssForm.error = error.message;
+        state.form.error = 'networkError';
+      } else state.form.error = error.message;
     };
 
     const getRss = (url) => {
@@ -108,8 +108,9 @@ const app = () => {
                 feedTitle, feedDescription, url: feedUrl, id: feedId,
               }];
             state.posts = [...postswithIds, ...state.posts];
-            state.rssForm.status = 'success';
-            state.rssForm.fields.input = '';
+            state.form.status = 'success';
+            elements.form.reset();
+            elements.input.focus();
           } else {
             feedId = state.feeds.find((stateFeed) => stateFeed.url === feedUrl).id;
             state.posts = updatePosts(postswithIds, state.posts, feedId);
@@ -137,13 +138,13 @@ const app = () => {
       e.preventDefault();
       const data = new FormData(e.target);
       const url = data.get('url');
-      state.rssForm.fields.input = url;
+      state.form.field.input = url;
       const urls = _.map(state.feeds, (feed) => feed.url);
       validateUrl(url, urls)
         .then((error) => {
           if (!error) {
-            state.rssForm.error = '';
-            state.rssForm.status = 'loading Rss';
+            state.form.error = '';
+            state.form.status = 'loading Rss';
             getRss(url);
           } else {
             errorHandler(error);
