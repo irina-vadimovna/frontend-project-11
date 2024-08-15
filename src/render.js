@@ -104,16 +104,12 @@ export default function render(state, [postsHeader, feedsHeader, viewButton]) {
 
     const newDiv = document.createElement('div');
     newDiv.classList.add('card', 'border-0');
-
     const bodyDiv = document.createElement('div');
     bodyDiv.classList.add('card-body');
-
     const header = document.createElement('h3');
     header.classList.add('card-title', 'h4');
     header.innerText = feedsHeader;
-
     bodyDiv.insertAdjacentElement('beforeend', header);
-
     newDiv.insertAdjacentElement('beforeend', bodyDiv);
 
     const ul = document.createElement('ul');
@@ -123,20 +119,15 @@ export default function render(state, [postsHeader, feedsHeader, viewButton]) {
     feeds.forEach(({ feedTitle, feedDesc }) => {
       const li = document.createElement('li');
       li.classList.add('list-group-item', 'border-0', 'border-end-0');
-
       const title = document.createElement('h3');
       title.classList.add('h6', 'm0');
       title.textContent = feedTitle;
-
       const desc = document.createElement('p');
       desc.classList.add('m0', 'small', 'text-black-50');
       desc.textContent = feedDesc;
-
       li.insertAdjacentElement('beforeend', title);
       li.insertAdjacentElement('beforeend', desc);
-
       ul.append(li);
-
       createPosts(state, postsHeader, viewButton, postsUl);
     });
     newDiv.insertAdjacentElement('beforeend', ul);
