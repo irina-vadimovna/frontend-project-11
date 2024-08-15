@@ -13,10 +13,10 @@ const parseRssXml = (xml) => {
   const feed = xml.querySelector('channel');
   const posts = feed.querySelectorAll('item');
   const feedTitle = feed.querySelector('title').textContent;
-  const feedDesc = feed.querySelector('description').textContent;
+  const feedDescription = feed.querySelector('description').textContent;
   return {
     feedTitle,
-    feedDesc,
+    feedDescription,
     posts: parsePostsXml(posts),
   };
 };

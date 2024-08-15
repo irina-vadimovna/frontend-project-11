@@ -6,9 +6,14 @@ import watch from './view.js';
 import resources from './locales/resources.js';
 import parseFeed from './parserRSS.js';
 
-const refreshTimeout = 5000;
+const addProxy = (url) => {
+  const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
+  proxyUrl.searchParams.set('url', url);
+  proxyUrl.searchParams.set('disableCache', 'true');
+  return proxyUrl.toString();
+};
 
-const addNewPosts = (newPosts, oldPosts, feedId) => {
+const updatePosts = (newPosts, oldPosts, feedId) => {
   const uniqueNewPosts = newPosts.filter(
     (newPost) => !oldPosts.some(
       (oldPost) => oldPost.title === newPost.title || oldPost.url === newPost.url,
@@ -20,13 +25,6 @@ const addNewPosts = (newPosts, oldPosts, feedId) => {
   }));
   const updatedPosts = [...postsWithFeedId, ...oldPosts];
   return updatedPosts;
-};
-
-const addProxy = (originUrl) => {
-  const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
-  proxyUrl.searchParams.set('url', originUrl);
-  proxyUrl.searchParams.set('disableCache', 'true');
-  return proxyUrl.toString();
 };
 
 const app = () => {
@@ -47,6 +45,7 @@ const app = () => {
     yup.setLocale({
       mixed: {
         notOneOf: i18nInstance.t('exists'),
+        required: i18nInstance.t('required'),
       },
       string: {
         url: i18nInstance.t('invalid'),
@@ -86,7 +85,7 @@ const app = () => {
       } else state.rssForm.error = error.message;
     };
 
-    const loadRss = (url) => {
+    const getRss = (url) => {
       const feedUrl = url.toString();
       const proxiedUrl = addProxy(url);
       const getRequest = axios.get(proxiedUrl, { responseType: 'json' });
@@ -95,7 +94,7 @@ const app = () => {
           const data = response.data.contents;
           let feedId;
           const feed = parseFeed(data);
-          const { feedTitle, feedDesc, posts } = feed;
+          const { feedTitle, feedDescription, posts } = feed;
           const postswithIds = posts.map((post) => ({
             ...post,
             feedId,
@@ -106,14 +105,14 @@ const app = () => {
             feedId = state.feeds.length + 1;
             state.feeds = [...state.feeds,
               {
-                feedTitle, feedDesc, url: feedUrl, id: feedId,
+                feedTitle, feedDescription, url: feedUrl, id: feedId,
               }];
             state.posts = [...postswithIds, ...state.posts];
             state.rssForm.status = 'success';
             state.rssForm.fields.input = '';
           } else {
             feedId = state.feeds.find((stateFeed) => stateFeed.url === feedUrl).id;
-            state.posts = addNewPosts(postswithIds, state.posts, feedId);
+            state.posts = updatePosts(postswithIds, state.posts, feedId);
           }
         })
         .catch((error) => {
@@ -122,13 +121,13 @@ const app = () => {
     };
 
     const refreshFeeds = () => {
-      const feedPromises = state.feeds.map(({ url }) => loadRss(url));
+      const feedPromises = state.feeds.map(({ url }) => getRss(url));
       return Promise.all(feedPromises);
     };
 
     const refresh = () => {
       refreshFeeds().then(() => {
-        setTimeout(refresh, refreshTimeout);
+        setTimeout(refresh, 5000);
       });
     };
 
@@ -145,7 +144,7 @@ const app = () => {
           if (!error) {
             state.rssForm.error = '';
             state.rssForm.status = 'loading Rss';
-            loadRss(url);
+            getRss(url);
           } else {
             errorHandler(error);
           }
