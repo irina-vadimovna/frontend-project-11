@@ -22,23 +22,6 @@ const addNewPosts = (newPosts, oldPosts, feedId) => {
   return updatedPosts;
 };
 
-const customErrors = {
-  string: {
-    url: ({ path }) => ({ key: 'invalid', values: { path } }),
-    test: ({ path }) => ({ key: 'exists', values: { path } }),
-  },
-};
-const validateUrl = (url, urls) => {
-  const schema = yup.string()
-    .url(customErrors.string.url)
-    .required();
-  return schema
-    .notOneOf(urls, customErrors.string.test)
-    .validate(url)
-    .then(() => null)
-    .catch((error) => error.message.key);
-};
-
 const addProxy = (originUrl) => {
   const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
   proxyUrl.searchParams.set('url', originUrl);
@@ -61,7 +44,22 @@ const app = () => {
     debug: false,
     resources,
   }).then(() => {
-    yup.setLocale(customErrors);
+    yup.setLocale({
+      mixed: {
+        notOneOf: i18nInstance.t('exists'),
+      },
+      string: {
+        url: i18nInstance.t('invalid'),
+      },
+    });
+    const validateUrl = (url, urls) => {
+      const schema = yup.string().url().required();
+      return schema
+        .notOneOf(urls)
+        .validate(url)
+        .then(() => null)
+        .catch((error) => error.message);
+    };
 
     const state = watch(elements, i18nInstance, {
       rssForm: {
