@@ -3,12 +3,14 @@ export default {
     languages: {
       ru: 'Русский',
     },
+    feeds: 'Фиды',
+    posts: 'Посты',
+    viewButton: 'Просмотр',
     errors: {
       invalid: 'Ссылка должна быть валидным URL',
       exists: 'RSS уже существует',
-      invalidRss: 'Ресурс не содержит валидный RSS',
-      network: 'Ошибка сети',
-      unknown: 'Неизвестная ошибка. Что-то пошло не так',
+      parseError: 'Ресурс не содержит валидный RSS',
+      networkError: 'Ошибка сети',
     },
     success: 'RSS успешно загружен',
   },

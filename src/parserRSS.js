@@ -1,22 +1,33 @@
-export default function parseRss(html) {
-  const parser = new DOMParser();
-  const data = parser.parseFromString(html, 'text/xml');
-  const parsererror = data.querySelector('parsererror');
-  if (parsererror) {
-    throw new Error('invalidRss');
-  }
-  const channel = data.querySelector('channel');
-  const title = channel.querySelector('title').textContent;
-  const description = channel.querySelector('description').textContent;
-  const items = channel.querySelectorAll('item');
-  const posts = Array.from(items).map((item) => {
-    const postTitle = item.querySelector('title').textContent;
-    const postDescription = item.querySelector('description').textContent;
-    const postLink = item.querySelector('link').textContent;
-    return { postTitle, postDescription, postLink };
-  });
+const parsePostsXml = (posts) => [...posts].map((item) => {
+  const title = item.querySelector('title').textContent;
+  const desc = item.querySelector('description').textContent;
+  const url = item.querySelector('link').textContent;
   return {
-    feed: { title, description },
-    posts,
+    title,
+    desc,
+    url,
   };
-}
+});
+
+const parseRssXml = (xml) => {
+  const feed = xml.querySelector('channel');
+  const posts = feed.querySelectorAll('item');
+  const feedTitle = feed.querySelector('title').textContent;
+  const feedDesc = feed.querySelector('description').textContent;
+  return {
+    feedTitle,
+    feedDesc,
+    posts: parsePostsXml(posts),
+  };
+};
+
+const parseFeed = (data) => {
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(data, 'text/xml');
+  if (xml.querySelector('parsererror')) {
+    throw new Error('parseError');
+  }
+  return parseRssXml(xml);
+};
+
+export default parseFeed;
