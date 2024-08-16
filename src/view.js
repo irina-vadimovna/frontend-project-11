@@ -4,7 +4,7 @@ import render from './render.js';
 export default (elements, i18n, state) => {
   const { input, message, submitBtn } = elements;
 
-  const [postsTr, feedsTr, viewButton] = [i18n.t('posts'), i18n.t('feeds'), i18n.t('viewButton')];
+  const [postsText, feedsText, viewButtonText] = [i18n.t('posts'), i18n.t('feeds'), i18n.t('viewButton')];
   return onChange(state, () => {
     const {
       form: { error, field, status },
@@ -25,7 +25,7 @@ export default (elements, i18n, state) => {
       submitBtn.disabled = true;
     }
     if (status === 'success') {
-      render(state, [postsTr, feedsTr, viewButton]);
+      render(state, [postsText, feedsText, viewButtonText]);
 
       message.classList.add('text-success');
       message.classList.remove('text-danger');

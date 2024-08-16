@@ -32,7 +32,7 @@ const config = {
         loader: 'babel-loader',
       },
       {
-        test: /\.(sass|less|css)$/,
+        test: /\.(sass|scss|css)$/,
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],

@@ -1,14 +1,14 @@
-const modalEl = {
+const modalElements = {
   header: document.querySelector('.modal-header'),
   body: document.querySelector('.modal-body'),
   openLinkButton: document.querySelector('.full-article'),
 };
 
 const renderModal = (posts, uiId) => {
-  const { title, desc, url } = posts.find((post) => post.url === uiId);
-  modalEl.header.textContent = title;
-  modalEl.body.textContent = desc;
-  modalEl.openLinkButton.href = url;
+  const { title, description, url } = posts.find((post) => post.url === uiId);
+  modalElements.header.textContent = title;
+  modalElements.body.textContent = description;
+  modalElements.openLinkButton.href = url;
 };
 
 const changeVisitedLinks = ({ id }) => {

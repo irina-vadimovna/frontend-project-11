@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import i18next from 'i18next';
 import axios from 'axios';
-import watch from './view.js';
+import watchState from './view.js';
 import resources from './locales/resources.js';
 import parseFeed from './parserRSS.js';
 
@@ -51,16 +51,8 @@ const app = () => {
         url: i18nInstance.t('invalid'),
       },
     });
-    const validateUrl = (url, urls) => {
-      const schema = yup.string().url().required();
-      return schema
-        .notOneOf(urls)
-        .validate(url)
-        .then(() => null)
-        .catch((error) => error.message);
-    };
 
-    const state = watch(elements, i18nInstance, {
+    const state = watchState(elements, i18nInstance, {
       form: {
         field: {
           input: '',
@@ -76,6 +68,15 @@ const app = () => {
       },
     });
 
+    const validateUrl = (url, urls) => {
+      const schema = yup.string().url().required();
+      return schema
+        .notOneOf(urls)
+        .validate(url)
+        .then(() => null)
+        .catch((error) => error.message);
+    };
+
     const errorHandler = (error) => {
       state.form.status = 'fail';
       if (typeof error === 'string') {
@@ -89,33 +90,31 @@ const app = () => {
       const feedUrl = url.toString();
       const proxiedUrl = addProxy(url);
       const getRequest = axios.get(proxiedUrl, { responseType: 'json' });
-      return getRequest
-        .then((response) => {
-          const data = response.data.contents;
-          let feedId;
-          const feed = parseFeed(data);
-          const { feedTitle, feedDescription, posts } = feed;
-          const postswithIds = posts.map((post) => ({
-            ...post,
-            feedId,
-            postId: _.uniqueId(),
-          }));
-          const index = _.findIndex(state.feeds, (stateFeed) => stateFeed.url === url);
-          if (index < 0) {
-            feedId = state.feeds.length + 1;
-            state.feeds = [...state.feeds,
-              {
-                feedTitle, feedDescription, url: feedUrl, id: feedId,
-              }];
-            state.posts = [...postswithIds, ...state.posts];
-            state.form.status = 'success';
-            elements.form.reset();
-            elements.input.focus();
-          } else {
-            feedId = state.feeds.find((stateFeed) => stateFeed.url === feedUrl).id;
-            state.posts = updatePosts(postswithIds, state.posts, feedId);
-          }
-        })
+      return getRequest.then((response) => {
+        const data = response.data.contents;
+        const feed = parseFeed(data);
+        const { feedTitle, feedDescription, posts } = feed;
+        let feedId;
+        const postswithIds = posts.map((post) => ({
+          ...post,
+          feedId,
+          postId: _.uniqueId(),
+        }));
+        const index = _.findIndex(state.feeds, (stateFeed) => stateFeed.url === url);
+        if (index < 0) {
+          feedId = state.feeds.length + 1;
+          state.feeds = [...state.feeds, {
+            feedTitle, feedDescription, url: feedUrl, id: feedId,
+          }];
+          state.posts = [...postswithIds, ...state.posts];
+          state.form.status = 'success';
+          elements.form.reset();
+          elements.input.focus();
+        } else {
+          feedId = state.feeds.find((stateFeed) => stateFeed.url === feedUrl).id;
+          state.posts = updatePosts(postswithIds, state.posts, feedId);
+        }
+      })
         .catch((error) => {
           errorHandler(error);
         });
@@ -123,16 +122,11 @@ const app = () => {
 
     const refreshFeeds = () => {
       const feedPromises = state.feeds.map(({ url }) => getRss(url));
-      return Promise.all(feedPromises);
-    };
-
-    const refresh = () => {
-      refreshFeeds().then(() => {
-        setTimeout(refresh, 5000);
+      return Promise.all(feedPromises).then(() => {
+        setTimeout(refreshFeeds, 5000);
       });
     };
-
-    refresh();
+    refreshFeeds();
 
     elements.form.addEventListener('submit', (e) => {
       e.preventDefault();
