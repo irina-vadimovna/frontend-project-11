@@ -116,17 +116,17 @@ export default function render(state, [postsHeader, feedsHeader, viewButton]) {
     ul.classList.add('list-group', 'border-0', 'rounded-0');
     const postsUl = document.createElement('ul');
     postsUl.classList.add('list-group', 'border-0', 'rounded-0');
-    feeds.forEach(({ feedTitle, feedDesc }) => {
+    feeds.forEach(({ feedTitle, feedDescription }) => {
       const li = document.createElement('li');
       li.classList.add('list-group-item', 'border-0', 'border-end-0');
       const title = document.createElement('h3');
       title.classList.add('h6', 'm0');
       title.textContent = feedTitle;
-      const desc = document.createElement('p');
-      desc.classList.add('m0', 'small', 'text-black-50');
-      desc.textContent = feedDesc;
+      const description = document.createElement('p');
+      description.classList.add('m0', 'small', 'text-black-50');
+      description.textContent = feedDescription;
       li.insertAdjacentElement('beforeend', title);
-      li.insertAdjacentElement('beforeend', desc);
+      li.insertAdjacentElement('beforeend', description);
       ul.append(li);
       createPosts(state, postsHeader, viewButton, postsUl);
     });

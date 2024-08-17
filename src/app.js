@@ -108,7 +108,7 @@ const app = () => {
           }];
           state.posts = [...postswithIds, ...state.posts];
           state.form.status = 'success';
-          elements.form.reset();
+          state.form.field.input = '';
           elements.input.focus();
         } else {
           feedId = state.feeds.find((stateFeed) => stateFeed.url === feedUrl).id;
