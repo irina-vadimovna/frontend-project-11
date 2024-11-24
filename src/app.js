@@ -48,7 +48,8 @@ const getParsedData = (url) => {
 };
 
 const loadRss = (url, state) => {
-  state.rssForm.status = 'loading Rss';
+  const setState = state;
+  setState.rssForm.status = 'loading Rss';
   return getParsedData(url).then((feed) => {
     const { feedTitle, feedDescription, posts } = feed;
     const feedId = _.uniqueId('feed_');
@@ -57,7 +58,7 @@ const loadRss = (url, state) => {
       feedId,
       postId: _.uniqueId('post_'),
     }));
-    state.feeds = [
+    setState.feeds = [
       ...state.feeds,
       {
         feedTitle,
@@ -66,19 +67,20 @@ const loadRss = (url, state) => {
         feedUrl: url,
       },
     ];
-    state.posts = [...postswithIds, ...state.posts];
-    state.rssForm.status = 'success';
-    state.rssForm.fields.input = '';
+    setState.posts = [...postswithIds, ...state.posts];
+    setState.rssForm.status = 'success';
+    setState.rssForm.fields.input = '';
   })
     .catch((error) => {
-      state.rssForm.error = getErrorCode(error);
+      setState.rssForm.error = getErrorCode(error);
     });
 };
 
 const updatePosts = (state) => {
-  const { feeds } = state;
+  const setState = state;
+  const { feeds } = setState;
   const feedsPromises = feeds.map(({ feedUrl, feedId }) => {
-    state.rssForm.status = 'loading Rss';
+    setState.rssForm.status = 'loading Rss';
     const oldPosts = state.posts.filter((post) => post.feedId === feedId);
     return getParsedData(feedUrl)
       .then((feed) => {
@@ -92,7 +94,7 @@ const updatePosts = (state) => {
             postId: _.uniqueId('post_'),
           }
         ));
-        state.posts = [...newUpdatedPosts, ...state.posts];
+        setState.posts = [...newUpdatedPosts, ...state.posts];
       })
       .catch(() => {});
   });
