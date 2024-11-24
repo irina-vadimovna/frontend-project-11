@@ -7,11 +7,10 @@ export default {
     posts: 'Посты',
     viewButton: 'Просмотр',
     errors: {
-      invalid: 'Ссылка должна быть валидным URL',
-      exists: 'RSS уже существует',
+      notUrl: 'Ссылка должна быть валидным URL',
+      duplicateUrl: 'RSS уже существует',
       parseError: 'Ресурс не содержит валидный RSS',
       networkError: 'Ошибка сети',
-      required: 'Не должно быть пустым',
     },
     success: 'RSS успешно загружен',
   },

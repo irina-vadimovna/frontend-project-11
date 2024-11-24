@@ -16,4 +16,9 @@ extends:
 
 rules:
   no-console: 0
-  import/extensions: 0
+  import/extensions: 
+    - error
+    - ignorePackages
+    - js: always
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
+  no-param-reassign: ["error", { props: true, ignorePropertyModificationsFor: ["state", "postsContainer", "feedsContainer"] }]
