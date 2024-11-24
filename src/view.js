@@ -53,7 +53,8 @@ const renderPost = (postUl, i18n, post, ui) => {
 
 const handlePosts = (state, postsContainer, i18n) => {
   const { posts, ui } = state;
-  postsContainer.innerHTML = '';
+  const setPostsContainer = postsContainer;
+  setPostsContainer.innerHTML = '';
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
 
@@ -73,7 +74,7 @@ const handlePosts = (state, postsContainer, i18n) => {
   cardDiv.insertAdjacentElement('beforeend', bodyDiv);
   cardDiv.insertAdjacentElement('beforeend', ul);
 
-  postsContainer.insertAdjacentElement('beforeend', cardDiv);
+  setPostsContainer.insertAdjacentElement('beforeend', cardDiv);
 };
 
 const renderFeed = (ul, feed) => {
@@ -97,9 +98,10 @@ const renderFeed = (ul, feed) => {
 
 const handleFeeds = (state, feedsContainer, i18n) => {
   const { feeds } = state;
+  const setFeedsContainer = feedsContainer;
 
   if (feeds.length !== 0) {
-    feedsContainer.innerHTML = '';
+    setFeedsContainer.innerHTML = '';
 
     const container = document.createElement('div');
     container.classList.add('card', 'border-0');
@@ -119,7 +121,7 @@ const handleFeeds = (state, feedsContainer, i18n) => {
     ul.classList.add('list-group', 'border-0', 'rounded-0');
     feeds.forEach((feed) => renderFeed(ul, feed));
     container.insertAdjacentElement('beforeend', ul);
-    feedsContainer.insertAdjacentElement('beforeend', container);
+    setFeedsContainer.insertAdjacentElement('beforeend', container);
   }
 };
 
